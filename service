@@ -3,6 +3,16 @@
 function main {
   set -x
 
+  if [[ -f /secrets/.env ]]; then
+    set -a
+    source /secrets/.env
+    set +a
+  fi
+
+  if [[ "$#" == 0 ]]; then
+    set -- atlantis server --gh-user="${ATLANTIS_GH_USER}" --repo-allowlist="${ATLANTIS_GH_REPO_ALLOWLIST}" --repo-config=/atlantis/repos.yaml
+  fi
+
   exec docker-entrypoint.sh "$@"
 }
 
